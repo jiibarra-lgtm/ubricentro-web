@@ -1,7 +1,7 @@
 import { supabase } from "./supabaseClient.js";
 import { REVIEWS_FALLBACK } from "./config.js";
 
-const SEGUNDOS_AUTOROTACION = 5;
+const SEGUNDOS_POR_TARJETA = 4; // controla la velocidad de la cinta
 
 // paleta de colores para los avatares de iniciales, se elige uno por
 // persona de forma determinística (mismo nombre = mismo color siempre)
@@ -30,76 +30,42 @@ async function traerReviews() {
   }
 }
 
-function armarCarrusel(container, { rating, total, reviews }) {
+function tarjeta(r) {
+  return `
+    <blockquote class="review-item">
+      <p>"${r.text}"</p>
+      <footer>
+        <span class="review-avatar" style="background:${colorPara(r.author_name)}">${iniciales(r.author_name)}</span>
+        <span class="review-autor">${r.author_name} — ${"★".repeat(r.rating)}</span>
+      </footer>
+    </blockquote>`;
+}
+
+function armarCinta(container, { rating, total, reviews }) {
+  // se duplica la lista una vez para que la animación pueda hacer loop
+  // infinito sin que se note el corte (al llegar a -50% se ve igual que
+  // al principio)
+  const html = reviews.map(tarjeta).join("");
+  const duracion = reviews.length * SEGUNDOS_POR_TARJETA;
+
   container.innerHTML = `
     <div class="reviews-header">
       <span class="rating">${rating.toFixed(1)} ★</span>
       <span class="total">${total} reseñas en Google</span>
     </div>
-    <div class="carrusel-reviews">
-      <button class="carrusel-flecha carrusel-prev" aria-label="Anterior">‹</button>
-      <div class="carrusel-track">
-        ${reviews
-          .map(
-            (r) => `
-          <blockquote class="review-item">
-            <p>"${r.text}"</p>
-            <footer>
-              <span class="review-avatar" style="background:${colorPara(r.author_name)}">${iniciales(r.author_name)}</span>
-              <span class="review-autor">${r.author_name} — ${"★".repeat(r.rating)}</span>
-            </footer>
-          </blockquote>`
-          )
-          .join("")}
+    <div class="marquee-reviews">
+      <div class="marquee-track" style="animation-duration:${duracion}s">
+        ${html}
+        ${html}
       </div>
-      <button class="carrusel-flecha carrusel-next" aria-label="Siguiente">›</button>
-    </div>
-    <div class="carrusel-dots">
-      ${reviews.map((_, i) => `<button class="dot" data-i="${i}" aria-label="Reseña ${i + 1}"></button>`).join("")}
     </div>
   `;
-
-  const track = container.querySelector(".carrusel-track");
-  const dots = [...container.querySelectorAll(".dot")];
-  let indice = 0;
-  let timer = null;
-
-  function mostrar(i) {
-    indice = (i + reviews.length) % reviews.length;
-    track.style.transform = `translateX(-${indice * 100}%)`;
-    dots.forEach((d, di) => d.classList.toggle("activo", di === indice));
-  }
-
-  function autoRotar() {
-    timer = setInterval(() => mostrar(indice + 1), SEGUNDOS_AUTOROTACION * 1000);
-  }
-
-  container.querySelector(".carrusel-prev").addEventListener("click", () => {
-    mostrar(indice - 1);
-    reiniciarTimer();
-  });
-  container.querySelector(".carrusel-next").addEventListener("click", () => {
-    mostrar(indice + 1);
-    reiniciarTimer();
-  });
-  dots.forEach((d) => d.addEventListener("click", () => {
-    mostrar(Number(d.dataset.i));
-    reiniciarTimer();
-  }));
-
-  function reiniciarTimer() {
-    clearInterval(timer);
-    autoRotar();
-  }
-
-  mostrar(0);
-  autoRotar();
 }
 
 export async function cargarReviewsTeaser(container) {
   const data = await traerReviews();
   if (!data) return null;
-  armarCarrusel(container, { ...data, reviews: data.reviews.slice(0, 5) });
+  armarCinta(container, { ...data, reviews: data.reviews.slice(0, 8) });
   return { rating: data.rating, total: data.total };
 }
 
@@ -109,6 +75,6 @@ export async function cargarReviewsCompletas(container) {
     container.innerHTML = "<p>Todavía no hay reseñas cargadas.</p>";
     return null;
   }
-  armarCarrusel(container, data);
+  armarCinta(container, data);
   return { rating: data.rating, total: data.total };
 }
