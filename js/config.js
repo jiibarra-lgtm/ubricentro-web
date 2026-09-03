@@ -86,5 +86,6 @@ export const FOTOS_FALLBACK = [
   { url: "https://picsum.photos/seed/taller6/500/400", categoria: "Equipo de trabajo" },
 ];
 
-// Imagen de fondo del hero (también de stock, mismo criterio que arriba).
-export const HERO_IMAGEN_FALLBACK = "https://picsum.photos/seed/lubricentro-hero/1600/900";
+// Imagen de fondo del hero y del popup de cotización (ya es una foto real
+// subida al bucket, no una de stock).
+export const HERO_IMAGEN_FALLBACK = "https://klqlmmnwzouwznfpbvfm.supabase.co/storage/v1/object/public/galeria/ChatGPT%20Image%203%20sept%202026,%2012_12_58%20a.m..png";
