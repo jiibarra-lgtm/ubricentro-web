@@ -16,6 +16,7 @@ export const NEGOCIO = {
   ],
 
   duracionTurnoDefault: 30, // minutos, se puede overridear por servicio
+  aniosEnMercado: 5, // DATO DE PRUEBA — completar con los años reales del negocio
 };
 
 // --- DATOS DE PRUEBA PARA EL BOCETO ---
@@ -60,18 +61,25 @@ export const SERVICIOS_FALLBACK = [
 ];
 
 export const REVIEWS_FALLBACK = {
-  rating: 5.0, // dato real de Google (41 reseñas), esto se puede pisar ya
+  rating: 5.0, // dato real de Google (41 reseñas)
   total: 41,
   reviews: [
-    // el texto de las reseñas todavía es de prueba — cuando conectemos la
-    // Edge Function con el Place ID real, esto se reemplaza solo por las
-    // reseñas de verdad
-    { author_name: "Martín G.", rating: 5, text: "Rapidísimo y muy prolijos, te explican todo antes de hacerlo." },
-    { author_name: "Ceci R.", rating: 5, text: "Excelente atención, ya es mi lubricentro de siempre." },
-    { author_name: "Fede A.", rating: 5, text: "Buen precio y buena onda, volvería sin dudar." },
-    { author_name: "Lucía P.", rating: 5, text: "Me avisaron por WhatsApp cuando estaba listo, muy cómodo." },
-    { author_name: "Nico D.", rating: 5, text: "Turno online súper fácil de sacar, sin vueltas." },
-    { author_name: "Vero S.", rating: 5, text: "Todo bien, tardaron un poco más de lo esperado pero el trabajo quedó bien." },
+    { author_name: "Dario Fernandez", rating: 5, text: "Excelente atención no solo telefónica sino también en persona, fui a hacer un cambio de aceite y filtros y todo joya, hasta me dieron factura. Muy recomendable." },
+    { author_name: "Emiliano Rodriguez", rating: 5, text: "Siempre que puedo lo llevo ahí, me atienden muy bien y se fijan en detalles extra que otros capaz pasan por alto. También limpian el motor y la zona del aceite. 100% recomendable." },
+    { author_name: "Brian Levin", rating: 5, text: "Un fenómeno Néstor. Te atiende de lujo. Cambio de aceite y filtro de diez. Muy buena atención y precios." },
+    { author_name: "Nicolas Ramis", rating: 5, text: "El mejor lubricentro al que fui. Lugar muy amplio, lleno de productos, gran variedad. Hacen servicios a camiones también." },
+    { author_name: "María del Carmen Colque Jimenez", rating: 5, text: "Honestidad, calidad y calidez. Quedó re lindo el motor del auto, gracias." },
+    { author_name: "Anu", rating: 5, text: "Excelente servicio, super recomendable y honesto." },
+    { author_name: "Gonzalo Martinez Lalis", rating: 5, text: "Muy buena atención. Además me limpiaron el motor y lo dejaron impecable." },
+    { author_name: "Joaquin Rodriguez", rating: 5, text: "Excelente atención, muy amables y muy buenos precios. Totalmente recomendable." },
+    { author_name: "Adrian Salvatierra", rating: 5, text: "Buenos precios, buena atención, hice cambio de aceite y de caja. Vuelvo seguro." },
+    { author_name: "Claudio Moya", rating: 5, text: "Siempre excelente atención y buenos precios." },
+    { author_name: "Leoncio Guanuco", rating: 5, text: "Buena atención al cliente, rapidez, y preguntan todo para hacer bien el trabajo. Volvería sin dudas." },
+    { author_name: "Adriana Villarreal", rating: 5, text: "Excelente atención y trabajo realizado, fui por cambio de aceite y filtros, y hasta el motor dejaron impecable. Recomiendo al 100%." },
+    { author_name: "Alejandro Figueroa", rating: 5, text: "Lo recomiendo, son rápidos y se nota que la tienen clara. Sin dudas vuelvo a cambiar el aceite y filtros." },
+    { author_name: "Maria de los Angeles Castaño", rating: 5, text: "Hace dos años que vamos porque es totalmente recomendable en la atención y en los precios. También te limpian el motor." },
+    { author_name: "Max Fer", rating: 5, text: "Hace 4 años que llevo el auto a hacer cambio de aceite y filtro. Te atienden con la mejor amabilidad y hacen un excelente laburo." },
+    { author_name: "Gustavo Casasola", rating: 5, text: "Excelente trato y profesionalismo. Recomendable por donde se lo mire, variedad, buenos precios y eficiencia." },
   ],
 };
 

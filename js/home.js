@@ -2,6 +2,7 @@ import { NEGOCIO, FOTOS_FALLBACK, HERO_IMAGEN_FALLBACK } from "./config.js";
 import { getServicios, renderServicios } from "./servicios.js";
 import { cargarReviewsTeaser } from "./reviews.js";
 import { inyectarSchemaNegocio } from "./schema.js";
+import { renderStatsBar } from "./stats-bar.js";
 import { supabase } from "./supabaseClient.js";
 import { initPopupCotizacion } from "./popup-cotizacion.js";
 import "./common.js";
@@ -14,7 +15,7 @@ if (NEGOCIO.direccion) {
 }
 
 document.querySelector(".hero").style.backgroundImage =
-  `linear-gradient(135deg, rgba(30,58,95,0.88), rgba(18,35,58,0.88)), url('${HERO_IMAGEN_FALLBACK}')`;
+  `linear-gradient(135deg, rgba(30,58,95,0.45), rgba(18,35,58,0.5)), url('${HERO_IMAGEN_FALLBACK}')`;
 
 getServicios().then((servicios) => {
   // en la home solo mostramos los primeros 3, el resto vive en servicios.html
@@ -23,6 +24,7 @@ getServicios().then((servicios) => {
 
 cargarReviewsTeaser(document.getElementById("reviews-container")).then((resumen) => {
   inyectarSchemaNegocio(resumen || {});
+  renderStatsBar(document.getElementById("stats-bar"), resumen || {});
 });
 
 cargarGaleria();
