@@ -1,11 +1,18 @@
 import { supabase } from "./supabaseClient.js";
+import { REVIEWS_FALLBACK } from "./config.js";
 
 // La api key de Google nunca va acá. La edge function `google-reviews` la
 // tiene como secret y devuelve el jsonb ya cacheado en `reviews_cache`.
+// Mientras esa función no esté deployada (o Supabase no esté conectado
+// todavía), usamos REVIEWS_FALLBACK para que la sección no quede vacía.
 async function traerReviews() {
-  const { data, error } = await supabase.functions.invoke("google-reviews");
-  if (error || !data?.reviews?.length) return null;
-  return data;
+  try {
+    const { data, error } = await supabase.functions.invoke("google-reviews");
+    if (error || !data?.reviews?.length) return REVIEWS_FALLBACK;
+    return data;
+  } catch {
+    return REVIEWS_FALLBACK;
+  }
 }
 
 function renderHeader(container, rating, total) {

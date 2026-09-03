@@ -48,6 +48,8 @@ body {
 
 .hero {
   background: linear-gradient(135deg, var(--primario), #12233a);
+  background-size: cover;
+  background-position: center;
   color: white;
   padding: 4rem 1.5rem;
   text-align: center;
