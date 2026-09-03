@@ -12,6 +12,7 @@ const $mensaje = document.getElementById("mensaje");
 
 let servicioSeleccionado = null;
 let horaSeleccionada = null;
+let boxIdDefault = null;
 
 init();
 
@@ -20,6 +21,11 @@ async function init() {
     .from("servicios")
     .select("id, nombre, duracion_min")
     .eq("activo", true);
+
+  // por ahora un solo elevador/box; cuando haya más de uno, acá se arma
+  // un selector y se deja de tomar siempre el primero
+  const { data: boxes } = await supabase.from("boxes").select("id").eq("activo", true).limit(1);
+  boxIdDefault = boxes?.[0]?.id ?? null;
 
   for (const s of servicios || []) {
     const opt = document.createElement("option");
@@ -63,6 +69,7 @@ async function cargarHorarios() {
     .from("turnos")
     .select("hora")
     .eq("fecha", fecha)
+    .eq("box_id", boxIdDefault)
     .neq("estado", "cancelado");
 
   const horasOcupadas = new Set((ocupados || []).map((t) => t.hora));
@@ -184,6 +191,7 @@ async function confirmarTurno(e) {
       cliente_id: cliente.id,
       vehiculo_id: vehiculo.id,
       servicio_id: $servicio.value,
+      box_id: boxIdDefault,
       fecha: $fecha.value,
       hora: horaSeleccionada,
       estado: "pendiente",

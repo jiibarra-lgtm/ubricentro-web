@@ -3,7 +3,10 @@ import { getServicios, renderServicios } from "./servicios.js";
 import { cargarReviewsTeaser } from "./reviews.js";
 import { inyectarSchemaNegocio } from "./schema.js";
 import { supabase } from "./supabaseClient.js";
+import { initPopupCotizacion } from "./popup-cotizacion.js";
 import "./common.js";
+
+initPopupCotizacion();
 
 // el h1 lleva la zona real del negocio, no queda un texto genérico
 if (NEGOCIO.direccion) {
