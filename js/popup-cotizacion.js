@@ -1,6 +1,5 @@
 import { NEGOCIO } from "./config.js";
 
-const SEGUNDOS_ANTES_DE_MOSTRAR = 3;
 const CLAVE_SESSION = "popup-cotizacion-cerrado";
 const IMAGEN_POPUP = "https://klqlmmnwzouwznfpbvfm.supabase.co/storage/v1/object/public/galeria/441c70a2-d28d-4e96-9f96-63f7d97d6fc6.png";
 
@@ -22,9 +21,7 @@ export function initPopupCotizacion() {
   );
   btnWhatsapp.href = `https://wa.me/${NEGOCIO.telefono}?text=${mensaje}`;
 
-  setTimeout(() => {
-    overlay.hidden = false;
-  }, SEGUNDOS_ANTES_DE_MOSTRAR * 1000);
+  overlay.hidden = false;
 
   function cerrar() {
     overlay.hidden = true;
