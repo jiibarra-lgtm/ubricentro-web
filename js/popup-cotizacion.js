@@ -1,4 +1,4 @@
-import { NEGOCIO } from "./config.js";
+import { NEGOCIO, HERO_IMAGEN_FALLBACK } from "./config.js";
 
 const SEGUNDOS_ANTES_DE_MOSTRAR = 3;
 const CLAVE_SESSION = "popup-cotizacion-cerrado";
@@ -11,7 +11,10 @@ export function initPopupCotizacion() {
   const overlay = document.getElementById("popup-cotizacion");
   const btnCerrar = document.getElementById("popup-cerrar");
   const btnWhatsapp = document.getElementById("popup-whatsapp");
+  const foto = document.getElementById("popup-foto");
   if (!overlay) return;
+
+  if (foto) foto.style.backgroundImage = `url('${HERO_IMAGEN_FALLBACK}')`;
 
   const mensaje = encodeURIComponent(
     "Hola! Quiero recibir una cotización por el cambio de aceite."

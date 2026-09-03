@@ -2,10 +2,10 @@
 // nada de esto debería aparecer pisado en el resto del código.
 
 export const NEGOCIO = {
-  nombre: "Lubricentro del Sur", // DATO DE PRUEBA — completar con el real
-  telefono: "5491122334455", // DATO DE PRUEBA — formato para wa.me, sin + ni espacios
-  direccion: "Av. Directorio 3200, Parque Avellaneda, CABA", // DATO DE PRUEBA
-  googlePlaceId: "", // ChIJ..., se usa en reviews.js para traer las reseñas reales
+  nombre: "Lubricentro MP",
+  telefono: "541151656144", // 011 5165-6144 → si no engancha por WhatsApp, probar con "5491151656144" (con el 9 de celular)
+  direccion: "Av. Juan Bautista Justo 3557, CABA",
+  googlePlaceId: "", // pendiente: sacarlo desde el buscador de Place ID de Google
   instagram: "",
   colorPrimario: "#1e3a5f",
   colorAcento: "#f2a900",
@@ -60,15 +60,18 @@ export const SERVICIOS_FALLBACK = [
 ];
 
 export const REVIEWS_FALLBACK = {
-  rating: 4.8,
-  total: 132,
+  rating: 5.0, // dato real de Google (41 reseñas), esto se puede pisar ya
+  total: 41,
   reviews: [
+    // el texto de las reseñas todavía es de prueba — cuando conectemos la
+    // Edge Function con el Place ID real, esto se reemplaza solo por las
+    // reseñas de verdad
     { author_name: "Martín G.", rating: 5, text: "Rapidísimo y muy prolijos, te explican todo antes de hacerlo." },
     { author_name: "Ceci R.", rating: 5, text: "Excelente atención, ya es mi lubricentro de siempre." },
-    { author_name: "Fede A.", rating: 4, text: "Buen precio y buena onda, volvería sin dudar." },
+    { author_name: "Fede A.", rating: 5, text: "Buen precio y buena onda, volvería sin dudar." },
     { author_name: "Lucía P.", rating: 5, text: "Me avisaron por WhatsApp cuando estaba listo, muy cómodo." },
     { author_name: "Nico D.", rating: 5, text: "Turno online súper fácil de sacar, sin vueltas." },
-    { author_name: "Vero S.", rating: 4, text: "Todo bien, tardaron un poco más de lo esperado pero el trabajo quedó bien." },
+    { author_name: "Vero S.", rating: 5, text: "Todo bien, tardaron un poco más de lo esperado pero el trabajo quedó bien." },
   ],
 };
 
