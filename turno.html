@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reservar turno online | Lubricentro</title>
+  <meta name="description" content="Reservá tu turno para cambio de aceite o service en minutos, elegís día y horario disponible." />
+  <meta name="robots" content="index, follow" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="nav">
+    <a href="index.html" class="logo">← Volver</a>
+  </header>
+
+  <main class="turno-page">
+    <h1>Reservar turno</h1>
+
+    <form id="form-turno">
+      <label>
+        Servicio
+        <select id="servicio" required></select>
+      </label>
+
+      <label>
+        Fecha
+        <input type="date" id="fecha" required />
+      </label>
+
+      <div id="horarios" class="horarios-grid"></div>
+
+      <label>Nombre y apellido <input type="text" id="nombre" required /></label>
+      <label>Teléfono <input type="tel" id="telefono" required /></label>
+      <label>Patente <input type="text" id="patente" required /></label>
+      <label>Marca / modelo <input type="text" id="marca" /></label>
+
+      <label class="checkbox-line">
+        <input type="checkbox" id="acepta-terminos" />
+        Acepto que mis datos se usen para gestionar el turno, según la
+        <a href="privacidad.html" target="_blank">política de privacidad</a>.
+      </label>
+
+      <button type="submit" class="btn-cta grande">Confirmar turno</button>
+      <p id="mensaje"></p>
+    </form>
+  </main>
+
+  <p class="fallback-contacto">
+    ¿Prefiere coordinar directo? <a id="link-whatsapp-fallback" href="#" target="_blank">Escribinos por WhatsApp</a>
+  </p>
+
+  <script type="module">
+    // el link de WhatsApp de emergencia se arma aparte, sin depender del
+    // import de Supabase — así si se cae la CDN o la DB, el cliente
+    // siempre tiene como contactarnos
+    import { NEGOCIO } from "./js/config.js";
+    document.getElementById("link-whatsapp-fallback").href = `https://wa.me/${NEGOCIO.telefono}`;
+  </script>
+  <script type="module" src="js/turnos.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nosotros y preguntas frecuentes | Lubricentro</title>
+  <meta name="description" content="Conocé nuestro taller y resolvé tus dudas sobre turnos, tiempos y formas de pago." />
+  <link rel="canonical" href="https://TUDOMINIO.com.ar/nosotros.html" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="nav">
+    <a href="index.html" class="logo">Lubricentro</a>
+    <nav>
+      <a href="servicios.html">Servicios</a>
+      <a href="resenas.html">Reseñas</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="turno.html" class="btn-cta">Sacar turno</a>
+    </nav>
+  </header>
+
+  <main class="pagina-interna">
+    <h1>Nosotros</h1>
+    <p>[Contar acá la historia real del lubricentro: años en el mercado, qué los distingue, fotos del equipo.]</p>
+
+    <section class="faq">
+      <h2>Preguntas frecuentes</h2>
+      <details>
+        <summary>¿Necesito turno o atienden sin reserva?</summary>
+        <p>Reservando turno online te asegurás horario, pero también atendemos por orden de llegada según disponibilidad.</p>
+      </details>
+      <details>
+        <summary>¿Cuánto tarda un cambio de aceite?</summary>
+        <p>En condiciones normales, entre 30 y 40 minutos.</p>
+      </details>
+      <details>
+        <summary>¿Puedo esperar en el local?</summary>
+        <p>Sí, tenemos espacio de espera.</p>
+      </details>
+    </section>
+  </main>
+
+  <a id="whatsapp-float" href="#" target="_blank" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.06-1.33A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.6 0-3.1-.44-4.38-1.2l-.31-.18-3.01.79.8-2.93-.2-.32A7.94 7.94 0 014 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/></svg>
+  </a>
+
+  <footer class="footer">
+    <p id="footer-horarios"></p>
+  </footer>
+
+  <script type="module">
+    import { inyectarSchemaFAQ } from "./js/schema.js";
+    import "./js/common.js";
+    inyectarSchemaFAQ();
+  </script>
+</body>
+</html>

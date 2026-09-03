@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/servicios/:slug", "destination": "/servicio.html" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
+  ]
+}
