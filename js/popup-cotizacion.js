@@ -1,7 +1,8 @@
-import { NEGOCIO, HERO_IMAGEN_FALLBACK } from "./config.js";
+import { NEGOCIO } from "./config.js";
 
 const SEGUNDOS_ANTES_DE_MOSTRAR = 3;
 const CLAVE_SESSION = "popup-cotizacion-cerrado";
+const IMAGEN_POPUP = "https://klqlmmnwzouwznfpbvfm.supabase.co/storage/v1/object/public/galeria/441c70a2-d28d-4e96-9f96-63f7d97d6fc6.png";
 
 export function initPopupCotizacion() {
   // si ya lo cerró en esta visita, no lo volvemos a mostrar hasta que
@@ -14,7 +15,7 @@ export function initPopupCotizacion() {
   const foto = document.getElementById("popup-foto");
   if (!overlay) return;
 
-  if (foto) foto.style.backgroundImage = `url('${HERO_IMAGEN_FALLBACK}')`;
+  if (foto) foto.style.backgroundImage = `url('${IMAGEN_POPUP}')`;
 
   const mensaje = encodeURIComponent(
     "Hola! Quiero recibir una cotización por el cambio de aceite."
