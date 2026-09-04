@@ -201,12 +201,13 @@ async function confirmarTurno(e) {
 
   if (errTurno) return mostrarError(errTurno);
 
+  const fechaConfirmada = $fecha.value; // guardar antes de resetear el form
   $mensaje.textContent = "";
   $form.reset();
 
   const linkCancelacion = `${location.origin}/cancelar.html?token=${turnoCreado.cancelacion_token}`;
   mostrarModalConfirmacion({
-    fecha: $fecha.value,
+    fecha: fechaConfirmada,
     hora: horaSeleccionada,
     patente,
     linkCancelacion,
