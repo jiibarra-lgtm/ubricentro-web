@@ -38,6 +38,7 @@ async function init() {
   });
 
   document.getElementById("filtro-fecha-turnos").addEventListener("change", cargarTurnos);
+  document.getElementById("btn-nuevo-turno").addEventListener("click", toggleFormTurnoManual);
   document.getElementById("btn-nuevo-servicio").addEventListener("click", agregarFilaServicioNuevo);
   document.getElementById("input-foto").addEventListener("change", subirFoto);
 }
@@ -61,6 +62,111 @@ function cambiarTab(tab) {
 }
 
 // ---------- TURNOS ----------
+
+const REGEX_PATENTE = /^([A-Z]{3}\d{3}|[A-Z]{2}\d{3}[A-Z]{2})$/;
+let boxIdDefault = null;
+
+async function obtenerBoxDefault() {
+  if (boxIdDefault) return boxIdDefault;
+  const { data } = await supabase.from("boxes").select("id").eq("activo", true).limit(1);
+  boxIdDefault = data?.[0]?.id ?? null;
+  return boxIdDefault;
+}
+
+async function toggleFormTurnoManual() {
+  const cont = document.getElementById("form-turno-manual");
+  if (!cont.hidden) {
+    cont.hidden = true;
+    return;
+  }
+
+  const { data: servicios } = await supabase.from("servicios").select("id, nombre").eq("activo", true);
+
+  cont.hidden = false;
+  cont.innerHTML = `
+    <div class="turno-manual-grid">
+      <select id="tm-servicio">
+        ${(servicios || []).map((s) => `<option value="${s.id}">${s.nombre}</option>`).join("")}
+      </select>
+      <input type="date" id="tm-fecha" />
+      <input type="time" id="tm-hora" />
+      <input type="text" id="tm-nombre" placeholder="Nombre del cliente" />
+      <input type="tel" id="tm-telefono" placeholder="Teléfono" />
+      <input type="text" id="tm-patente" placeholder="Patente" />
+      <input type="text" id="tm-marca" placeholder="Marca / modelo" />
+    </div>
+    <button id="btn-guardar-turno-manual" class="btn-cta">Guardar turno</button>
+    <p id="tm-mensaje"></p>
+  `;
+
+  document.getElementById("btn-guardar-turno-manual").addEventListener("click", guardarTurnoManual);
+}
+
+async function guardarTurnoManual() {
+  const mensaje = document.getElementById("tm-mensaje");
+  const servicio_id = document.getElementById("tm-servicio").value;
+  const fecha = document.getElementById("tm-fecha").value;
+  const hora = document.getElementById("tm-hora").value;
+  const nombre = document.getElementById("tm-nombre").value.trim();
+  const telefono = document.getElementById("tm-telefono").value.trim();
+  const patente = document.getElementById("tm-patente").value.trim().toUpperCase().replace(/\s/g, "");
+  const marca = document.getElementById("tm-marca").value.trim();
+
+  if (!servicio_id || !fecha || !hora || !nombre || !telefono || !patente) {
+    mensaje.textContent = "Completá todos los campos obligatorios (marca es opcional).";
+    return;
+  }
+  if (!REGEX_PATENTE.test(patente)) {
+    mensaje.textContent = "La patente no tiene un formato válido (ej: AB123CD o ABC123).";
+    return;
+  }
+
+  mensaje.textContent = "Guardando...";
+  const box_id = await obtenerBoxDefault();
+
+  let { data: cliente } = await supabase.from("clientes").select("id").eq("telefono", telefono).maybeSingle();
+  if (!cliente) {
+    const { data: nuevo, error } = await supabase
+      .from("clientes")
+      .insert({ nombre, telefono })
+      .select("id")
+      .single();
+    if (error) return (mensaje.textContent = "Error al guardar el cliente: " + error.message);
+    cliente = nuevo;
+  }
+
+  let { data: vehiculo } = await supabase.from("vehiculos").select("id").eq("patente", patente).maybeSingle();
+  if (!vehiculo) {
+    const { data: nuevo, error } = await supabase
+      .from("vehiculos")
+      .insert({ cliente_id: cliente.id, patente, marca })
+      .select("id")
+      .single();
+    if (error) return (mensaje.textContent = "Error al guardar el vehículo: " + error.message);
+    vehiculo = nuevo;
+  }
+
+  const { error: errTurno } = await supabase.from("turnos").insert({
+    cliente_id: cliente.id,
+    vehiculo_id: vehiculo.id,
+    servicio_id,
+    box_id,
+    fecha,
+    hora,
+    estado: "confirmado",
+  });
+
+  if (errTurno) {
+    mensaje.textContent = errTurno.message.includes("duplicate")
+      ? "Ya hay un turno en ese horario, elegí otro."
+      : "No se pudo guardar: " + errTurno.message;
+    return;
+  }
+
+  mensaje.textContent = "Turno cargado ✓";
+  document.getElementById("form-turno-manual").hidden = true;
+  cargarTurnos();
+}
 
 async function cargarTurnos() {
   const cont = document.getElementById("lista-turnos");

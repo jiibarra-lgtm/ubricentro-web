@@ -36,8 +36,12 @@
       <section id="tab-turnos" class="tab-panel activo">
         <div class="panel-header">
           <h2>Turnos</h2>
-          <input type="date" id="filtro-fecha-turnos" />
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <input type="date" id="filtro-fecha-turnos" />
+            <button id="btn-nuevo-turno" class="btn-cta">+ Cargar turno manual</button>
+          </div>
         </div>
+        <div id="form-turno-manual" class="form-turno-manual" hidden></div>
         <div id="lista-turnos" class="lista-turnos">Cargando...</div>
       </section>
 

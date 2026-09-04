@@ -8,6 +8,7 @@
   justify-content: center;
   background: linear-gradient(135deg, var(--primario), #0e1c2e);
 }
+.login-screen[hidden] { display: none; }
 .login-box {
   background: white;
   padding: 2.5rem 2rem;
@@ -77,6 +78,26 @@
 }
 .panel-header h2 { color: var(--primario); margin: 0; }
 .panel-header input[type="date"] { padding: 0.5rem; border-radius: 6px; border: 1px solid var(--borde); }
+
+.form-turno-manual {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+}
+.turno-manual-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+.turno-manual-grid input, .turno-manual-grid select {
+  padding: 0.5rem;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+#tm-mensaje { font-size: 0.85rem; color: var(--primario); margin-top: 0.5rem; }
 
 /* turnos */
 .lista-turnos { display: flex; flex-direction: column; gap: 0.7rem; }
