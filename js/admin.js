@@ -1,5 +1,10 @@
 import { supabase } from "./supabaseClient.js";
 
+// el login solo pide contraseña; el email de la cuenta admin queda fijo acá
+// adentro (igual sigue siendo un login real contra Supabase Auth, la base
+// de datos exige estar autenticado para poder editar turnos/servicios/fotos)
+const EMAIL_ADMIN = "ibarrajuan0806@gmail.com";
+
 const loginScreen = document.getElementById("login-screen");
 const adminScreen = document.getElementById("admin-screen");
 const formLogin = document.getElementById("form-login");
@@ -20,11 +25,10 @@ async function init() {
   formLogin.addEventListener("submit", async (e) => {
     e.preventDefault();
     loginError.textContent = "";
-    const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) loginError.textContent = "Email o contraseña incorrectos.";
+    const { error } = await supabase.auth.signInWithPassword({ email: EMAIL_ADMIN, password });
+    if (error) loginError.textContent = "Contraseña incorrecta.";
   });
 
   document.getElementById("btn-logout").addEventListener("click", () => supabase.auth.signOut());

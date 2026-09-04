@@ -24,8 +24,9 @@
 
 ## Panel de administración
 - Entrar a `/admin.html` (no está linkeado desde el sitio público, se accede por URL directa)
-- Usuario de acceso: `ibarrajuan0806@gmail.com` (creado en Supabase → Authentication → Users)
-- Desde ahí: marcar turnos como completados/cancelados, crear/editar/borrar servicios y precios, subir/borrar fotos del taller (se suben directo al bucket `galeria`, sin pasar por el dashboard de Supabase)
+- Login: solo pide contraseña (el usuario `ibarrajuan0806@gmail.com` queda fijo internamente en `js/admin.js`)
+- **Importante**: en Supabase → Authentication → Users, la contraseña de ese usuario tiene que estar seteada en `13221` (si la creaste con otra, entrá al usuario y cambiala desde ahí)
+- Desde el panel: marcar turnos como completados/cancelados, crear/editar/borrar servicios y precios, subir/borrar fotos del taller
 
 ## Pendiente para las próximas fases
 - Admin panel (turnos, clientes, analíticas)
