@@ -69,6 +69,7 @@
     // import de Supabase — así si se cae la CDN o la DB, el cliente
     // siempre tiene como contactarnos
     import { NEGOCIO } from "./js/config.js";
+    import "./js/common.js";
     document.getElementById("link-whatsapp-fallback").href = `https://wa.me/${NEGOCIO.telefono}`;
   </script>
   <script type="module" src="js/turnos.js"></script>
