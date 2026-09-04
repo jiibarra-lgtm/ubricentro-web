@@ -5,7 +5,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
-const DOMINIO = process.env.SITE_URL || "https://TUDOMINIO.com.ar";
+const DOMINIO = process.env.SITE_URL || "https://ubricentro-web.vercel.app";
 
 export default async function handler(req, res) {
   const { data: servicios } = await supabase

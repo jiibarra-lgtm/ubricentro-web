@@ -17,8 +17,8 @@
 - `sitemap.xml` dinámico en `api/sitemap.js` (Vercel Serverless Function) — se arma solo con los servicios activos en la DB
 - `robots.txt` en la raíz
 
-### Antes de publicar, reemplazar
-- `TUDOMINIO.com.ar` en `index.html`, `robots.txt`, `js/servicio-detalle.js` y `api/sitemap.js`
+### Antes de publicar con dominio propio, reemplazar
+- `ubricentro-web.vercel.app` (dominio provisorio de Vercel) por el dominio real en `index.html`, `robots.txt`, `js/servicio-detalle.js`, `api/sitemap.js`, `nosotros.html`, `resenas.html`, `servicios.html`
 - Variables de entorno en Vercel: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SITE_URL`
 - Cargar `slug` en cada fila de la tabla `servicios` (ej: `cambio-de-aceite`)
 

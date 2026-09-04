@@ -18,7 +18,7 @@ if (!servicio) {
   document.getElementById("page-title").textContent = `${servicio.nombre}${zona} | ${NEGOCIO.nombre}`;
   document.getElementById("page-description").content =
     servicio.descripcion || `${servicio.nombre} en ${NEGOCIO.nombre}. Reservá tu turno online.`;
-  document.getElementById("page-canonical").href = `https://TUDOMINIO.com.ar/servicios/${slug}`;
+  document.getElementById("page-canonical").href = `https://ubricentro-web.vercel.app/servicios/${slug}`;
 
   document.getElementById("servicio-nombre").textContent = servicio.nombre;
   document.getElementById("breadcrumb-actual").textContent = servicio.nombre;
