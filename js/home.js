@@ -6,15 +6,18 @@ import { renderStatsBar } from "./stats-bar.js";
 import { renderMarcas } from "./marcas.js";
 import { supabase } from "./supabaseClient.js";
 import { initPopupCotizacion } from "./popup-cotizacion.js";
+import { initBannerCampania } from "./banner-campania.js";
 import "./common.js";
 
 initPopupCotizacion();
+initBannerCampania();
 renderMarcas(document.getElementById("lista-marcas"), document.getElementById("lista-aditivos"));
 
 // el h1 lleva la zona real del negocio, no queda un texto genérico
-if (NEGOCIO.direccion) {
-  document.getElementById("hero-h1").textContent += ` en ${NEGOCIO.direccion}`;
-}
+// el h1 ya menciona el barrio; acá solo completamos con la calle
+// (se toma la primera parte de la dirección completa, antes de la coma)
+const calle = NEGOCIO.direccion.split(",")[0];
+document.getElementById("hero-h1").textContent += ` — ${calle}`;
 
 document.querySelector(".hero").style.backgroundImage =
   `linear-gradient(135deg, rgba(30,58,95,0.45), rgba(18,35,58,0.5)), url('${HERO_IMAGEN_FALLBACK}')`;

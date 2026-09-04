@@ -17,6 +17,31 @@ body {
 
 .home-body { background: #eef1f5; }
 
+.banner-campania {
+  background: linear-gradient(90deg, var(--acento), #d99400);
+  color: #22180a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+}
+.banner-campania[hidden] { display: none; }
+.banner-campania a {
+  background: var(--primario);
+  color: white;
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+.banner-campania a.banner-wsp { background: #1c8a4a; }
+.banner-cerrar { background: none; border: none; font-size: 1rem; cursor: pointer; color: #22180a; }
+
 .nav {
   display: flex;
   justify-content: space-between;

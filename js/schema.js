@@ -11,8 +11,17 @@ export async function inyectarSchemaNegocio({ rating, total } = {}) {
     telephone: `+${NEGOCIO.telefono}`,
     address: {
       "@type": "PostalAddress",
-      streetAddress: NEGOCIO.direccion,
+      streetAddress: "Av. Juan Bautista Justo 3557",
+      addressLocality: "Villa del Parque",
+      addressRegion: "Ciudad Autónoma de Buenos Aires",
+      addressCountry: "AR",
     },
+    areaServed: [
+      { "@type": "Place", name: "Villa del Parque, CABA" },
+      { "@type": "Place", name: "Agronomía, CABA" },
+      { "@type": "Place", name: "Villa Devoto, CABA" },
+      { "@type": "Place", name: "Caballito, CABA" },
+    ],
     openingHoursSpecification: NEGOCIO.horarios.map((h) => ({
       "@type": "OpeningHoursSpecification",
       dayOfWeek: h.dia,
