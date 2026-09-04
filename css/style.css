@@ -57,11 +57,27 @@ body {
 
 .hero h1 { font-size: 2rem; margin-bottom: 0.5rem; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
 .hero p { opacity: 0.95; margin-bottom: 1.5rem; text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
+.hero-detalle { font-size: 0.9rem; max-width: 520px; margin: -1rem auto 1.5rem; opacity: 0.9; }
 
-.servicios, .reseñas, .galeria, .faq {
+.servicios, .reseñas, .galeria, .faq, .marcas {
   padding: 3rem 1.5rem;
   max-width: 960px;
   margin: 0 auto;
+}
+
+.marcas { text-align: center; }
+.marcas h2 { color: var(--primario); margin-bottom: 1.5rem; }
+.marcas-subtitulo { margin-top: 2.5rem; font-size: 1.05rem; }
+.marcas-lista { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; }
+.marca-badge {
+  border: 1.5px solid var(--borde);
+  color: var(--primario);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.6rem 1.4rem;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  background: white;
 }
 
 .stats-bar {

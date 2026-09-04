@@ -17,6 +17,12 @@ export const NEGOCIO = {
 
   duracionTurnoDefault: 30, // minutos, se puede overridear por servicio
   aniosEnMercado: 5, // DATO DE PRUEBA — completar con los años reales del negocio
+
+  // marcas de aceite/lubricantes con las que trabaja el negocio (líderes del mercado)
+  marcas: ["Elaion", "Castrol", "Shell", "Total", "Motul", "YPF", "Valvoline", "Mobil 1"],
+
+  // aditivos para motor conocidos que también se ofrecen/aplican
+  aditivos: ["Liqui Moly", "STP", "Bardahl", "Wynn's"],
 };
 
 // --- DATOS DE PRUEBA PARA EL BOCETO ---
