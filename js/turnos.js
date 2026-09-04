@@ -201,14 +201,50 @@ async function confirmarTurno(e) {
 
   if (errTurno) return mostrarError(errTurno);
 
-  $mensaje.textContent = "¡Turno confirmado! Te va a llegar la confirmación por WhatsApp.";
+  $mensaje.textContent = "";
   $form.reset();
 
   const linkCancelacion = `${location.origin}/cancelar.html?token=${turnoCreado.cancelacion_token}`;
-  const msj = encodeURIComponent(
-    `Hola! Quiero confirmar mi turno del ${$fecha.value} a las ${horaSeleccionada} para ${patente}.\n\nSi necesitás cancelar o cambiar el turno: ${linkCancelacion}`
+  mostrarModalConfirmacion({
+    fecha: $fecha.value,
+    hora: horaSeleccionada,
+    patente,
+    linkCancelacion,
+  });
+}
+
+function formatearFecha(fechaISO) {
+  const dias = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  const [y, m, d] = fechaISO.split("-").map(Number);
+  const fecha = new Date(y, m - 1, d);
+  return `${dias[fecha.getDay()]}, ${d} de ${fecha.toLocaleDateString("es-AR", { month: "long" })}`;
+}
+
+function mostrarModalConfirmacion({ fecha, hora, patente, linkCancelacion }) {
+  const modal = document.getElementById("modal-confirmacion");
+  document.getElementById("confirmacion-fecha").textContent = `${formatearFecha(fecha)} · ${hora} hs`;
+
+  const mensajeWsp = encodeURIComponent(
+    `Hola! Quiero confirmar mi turno del ${fecha} a las ${hora} para ${patente}.\n\nSi necesito cancelar o cambiar el turno: ${linkCancelacion}`
   );
-  window.open(`https://wa.me/${NEGOCIO.telefono}?text=${msj}`, "_blank");
+  document.getElementById("confirmacion-whatsapp").href = `https://wa.me/${NEGOCIO.telefono}?text=${mensajeWsp}`;
+
+  document.getElementById("confirmacion-mapa").href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(NEGOCIO.nombre + " " + NEGOCIO.direccion)}`;
+
+  const btnCompartir = document.getElementById("confirmacion-compartir");
+  btnCompartir.onclick = async () => {
+    const texto = `Turno en ${NEGOCIO.nombre} — ${formatearFecha(fecha)} a las ${hora} hs.`;
+    if (navigator.share) {
+      try { await navigator.share({ text: texto }); } catch { /* el usuario canceló, no pasa nada */ }
+    } else {
+      await navigator.clipboard.writeText(texto);
+      btnCompartir.textContent = "Copiado ✓";
+      setTimeout(() => (btnCompartir.textContent = "🔗 Compartir mi turno"), 2000);
+    }
+  };
+
+  document.getElementById("confirmacion-cerrar").onclick = () => (modal.hidden = true);
+  modal.hidden = false;
 }
 
 function mostrarError(error) {

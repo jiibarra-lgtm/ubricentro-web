@@ -49,6 +49,21 @@
     ¿Prefiere coordinar directo? <a id="link-whatsapp-fallback" href="#" target="_blank">Escribinos por WhatsApp</a>
   </p>
 
+  <div id="modal-confirmacion" class="popup-overlay" hidden>
+    <div class="popup-box confirmacion-box">
+      <h3 class="confirmacion-titulo">Listo</h3>
+      <p id="confirmacion-fecha" class="confirmacion-fecha"></p>
+      <p class="confirmacion-mensaje">¡Turno confirmado! Te esperamos. Tratá de llegar 10 minutos antes de tu horario.</p>
+
+      <div class="confirmacion-acciones">
+        <button id="confirmacion-cerrar" class="btn-secundario">Cerrar</button>
+        <a id="confirmacion-whatsapp" href="#" target="_blank" class="btn-whatsapp">Avisar por WhatsApp</a>
+        <a id="confirmacion-mapa" href="#" target="_blank" class="btn-secundario">📍 Cómo llegar a Lubricentro MP</a>
+        <button id="confirmacion-compartir" class="btn-secundario">🔗 Compartir mi turno</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     // el link de WhatsApp de emergencia se arma aparte, sin depender del
     // import de Supabase — así si se cae la CDN o la DB, el cliente
