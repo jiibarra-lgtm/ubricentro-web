@@ -24,9 +24,14 @@
 
 ## Panel de administración
 - Entrar a `/admin.html` (no está linkeado desde el sitio público, se accede por URL directa)
-- Login: solo pide contraseña (el usuario `ibarrajuan0806@gmail.com` queda fijo internamente en `js/admin.js`)
-- **Importante**: en Supabase → Authentication → Users, la contraseña de ese usuario tiene que estar seteada en `13221` (si la creaste con otra, entrá al usuario y cambiala desde ahí)
-- Desde el panel: marcar turnos como completados/cancelados, crear/editar/borrar servicios y precios, subir/borrar fotos del taller
+- Login con email + contraseña real de Supabase Auth — para dar acceso a más de una persona, creá un usuario nuevo por cada una en Supabase → Authentication → Users
+- **Turnos**: vista lista o semanal, cargar turnos manuales (atajo: tecla `n`), marcar completado (pide mecánico y km, arma el historial del vehículo solo), cancelar, exportar a CSV
+- **Clientes**: buscador por patente o teléfono, historial de services por vehículo, alerta si hace 6+ meses que no viene, notas internas editables
+- **Servicios y precios**: alta/baja/edición, guarda automáticamente el historial de cambios de precio en `precios_historial`
+- **Papelera**: los servicios borrados se pueden restaurar, no se pierden para siempre
+- **Fotos**: subida directa al bucket `galeria`, categorización, borrado
+- **Dashboard**: turnos del mes, ingresos estimados, gráfico de servicios más pedidos y de ocupación por horario
+- Botón de modo oscuro (🌙) arriba a la derecha, se recuerda entre sesiones
 
 ## Pendiente para las próximas fases
 - Admin panel (turnos, clientes, analíticas)

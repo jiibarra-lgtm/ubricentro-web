@@ -14,6 +14,7 @@
     <form id="form-login" class="login-box">
       <h1>Panel de administración</h1>
       <p>Lubricentro MP</p>
+      <label>Email <input type="email" id="login-email" required autocomplete="username" /></label>
       <label>Contraseña <input type="password" id="login-password" required autocomplete="current-password" /></label>
       <button type="submit" class="btn-cta grande">Ingresar</button>
       <p id="login-error" class="login-error"></p>
@@ -23,13 +24,19 @@
   <div id="admin-screen" class="admin-screen" hidden>
     <header class="admin-header">
       <span class="logo">Lubricentro MP · Admin</span>
-      <button id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      <div style="display:flex; gap:0.6rem; align-items:center;">
+        <button id="btn-modo-oscuro" class="btn-logout" title="Modo oscuro">🌙</button>
+        <button id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
     </header>
 
     <nav class="admin-tabs">
       <button class="tab-btn activo" data-tab="turnos">Turnos</button>
+      <button class="tab-btn" data-tab="clientes">Clientes</button>
       <button class="tab-btn" data-tab="servicios">Servicios y precios</button>
+      <button class="tab-btn" data-tab="papelera">Papelera</button>
       <button class="tab-btn" data-tab="fotos">Fotos</button>
+      <button class="tab-btn" data-tab="dashboard">Dashboard</button>
     </nav>
 
     <main class="admin-main">
@@ -37,12 +44,24 @@
         <div class="panel-header">
           <h2>Turnos</h2>
           <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <button id="btn-vista-lista" class="tab-mini activo">Lista</button>
+            <button id="btn-vista-semana" class="tab-mini">Semana</button>
             <input type="date" id="filtro-fecha-turnos" />
-            <button id="btn-nuevo-turno" class="btn-cta">+ Cargar turno manual</button>
+            <button id="btn-exportar-csv" class="btn-secundario-admin">⬇ Exportar CSV</button>
+            <button id="btn-nuevo-turno" class="btn-cta">+ Cargar turno manual (n)</button>
           </div>
         </div>
         <div id="form-turno-manual" class="form-turno-manual" hidden></div>
         <div id="lista-turnos" class="lista-turnos">Cargando...</div>
+        <div id="vista-semana" class="vista-semana" hidden></div>
+      </section>
+
+      <section id="tab-clientes" class="tab-panel">
+        <div class="panel-header">
+          <h2>Clientes</h2>
+        </div>
+        <input type="text" id="buscar-cliente" class="input-buscar" placeholder="Buscar por patente o teléfono..." />
+        <div id="resultado-clientes" class="resultado-clientes"></div>
       </section>
 
       <section id="tab-servicios" class="tab-panel">
@@ -51,6 +70,13 @@
           <button id="btn-nuevo-servicio" class="btn-cta">+ Nuevo servicio</button>
         </div>
         <div id="lista-servicios-admin" class="lista-servicios-admin">Cargando...</div>
+      </section>
+
+      <section id="tab-papelera" class="tab-panel">
+        <div class="panel-header">
+          <h2>Papelera de servicios</h2>
+        </div>
+        <div id="lista-papelera" class="lista-servicios-admin">Cargando...</div>
       </section>
 
       <section id="tab-fotos" class="tab-panel">
@@ -63,6 +89,23 @@
         </div>
         <p id="foto-status"></p>
         <div id="grid-fotos-admin" class="grid-fotos-admin">Cargando...</div>
+      </section>
+
+      <section id="tab-dashboard" class="tab-panel">
+        <div class="panel-header">
+          <h2>Dashboard del mes</h2>
+        </div>
+        <div id="dashboard-resumen" class="dashboard-resumen">Cargando...</div>
+        <div class="dashboard-graficos">
+          <div class="grafico-box">
+            <h3>Servicios más pedidos</h3>
+            <div id="grafico-servicios"></div>
+          </div>
+          <div class="grafico-box">
+            <h3>Ocupación por franja horaria</h3>
+            <div id="grafico-horarios"></div>
+          </div>
+        </div>
       </section>
     </main>
   </div>

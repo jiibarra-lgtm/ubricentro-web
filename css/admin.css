@@ -167,3 +167,72 @@
 @media (max-width: 640px) {
   .servicio-row { grid-template-columns: 1fr 1fr; }
 }
+
+/* modo oscuro */
+body.modo-oscuro { background: #14181f; }
+body.modo-oscuro .admin-main,
+body.modo-oscuro .turno-card,
+body.modo-oscuro .servicio-row,
+body.modo-oscuro .form-turno-manual,
+body.modo-oscuro .foto-card-admin,
+body.modo-oscuro .cliente-card,
+body.modo-oscuro .vehiculo-box,
+body.modo-oscuro .grafico-box,
+body.modo-oscuro .stat-dashboard { background: #1e2430; color: #e4e7ec; }
+body.modo-oscuro .servicio-row input,
+body.modo-oscuro .turno-manual-grid input,
+body.modo-oscuro .turno-manual-grid select,
+body.modo-oscuro .cliente-notas,
+body.modo-oscuro .input-buscar { background: #262d3b; color: #e4e7ec; border-color: #3a4356; }
+body.modo-oscuro .panel-header h2,
+body.modo-oscuro .turno-info strong { color: #9db4d8; }
+
+/* tabs mini (lista/semana) */
+.tab-mini {
+  background: white;
+  border: 1px solid var(--borde);
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.tab-mini.activo { background: var(--primario); color: white; border-color: var(--primario); }
+.btn-secundario-admin { background: white; border: 1px solid var(--borde); border-radius: 6px; padding: 0.5rem 0.9rem; cursor: pointer; font-size: 0.85rem; }
+
+/* vista semana */
+.vista-semana { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.6rem; }
+.semana-columna { background: white; border-radius: 8px; padding: 0.7rem; }
+.semana-columna h4 { margin: 0 0 0.5rem; font-size: 0.85rem; color: var(--primario); text-transform: capitalize; }
+.semana-item { font-size: 0.78rem; padding: 0.3rem 0.4rem; border-radius: 4px; background: #eef1f5; margin-bottom: 0.3rem; }
+.semana-item.completado { background: #d7ecdf; }
+.semana-item.cancelado { background: #f1d6d6; text-decoration: line-through; }
+.semana-vacio { font-size: 0.78rem; color: #999; }
+
+/* clientes */
+.input-buscar { width: 100%; padding: 0.7rem; border: 1px solid var(--borde); border-radius: 8px; margin-bottom: 1rem; font-size: 0.95rem; }
+.resultado-clientes { display: flex; flex-direction: column; gap: 0.8rem; }
+.cliente-card { background: white; border-radius: 8px; padding: 1rem 1.2rem; }
+.cliente-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+.cliente-header strong { color: var(--primario); }
+.cliente-notas { width: 100%; min-height: 50px; border: 1px solid var(--borde); border-radius: 6px; padding: 0.5rem; font-size: 0.85rem; margin-bottom: 0.8rem; }
+.vehiculo-box { border-top: 1px solid var(--borde); padding-top: 0.6rem; margin-top: 0.6rem; font-size: 0.9rem; }
+.alerta-inactivo { display: block; color: #b3261e; font-size: 0.78rem; margin-top: 0.2rem; }
+.historial-lista { margin: 0.4rem 0 0; padding-left: 1.1rem; font-size: 0.8rem; color: #666; }
+.sin-historial { font-size: 0.8rem; color: #999; margin: 0.3rem 0 0; }
+
+/* papelera */
+.papelera-row { grid-template-columns: 2fr 1fr 2fr auto; }
+
+/* dashboard */
+.dashboard-resumen { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.stat-dashboard { background: white; border-radius: 8px; padding: 1rem 1.5rem; text-align: center; flex: 1; min-width: 140px; }
+.stat-dashboard strong { display: block; font-size: 1.5rem; color: var(--primario); }
+.stat-dashboard span { font-size: 0.8rem; color: #777; }
+.dashboard-graficos { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+.grafico-box { background: white; border-radius: 8px; padding: 1rem 1.2rem; }
+.grafico-box h3 { font-size: 0.95rem; color: var(--primario); margin: 0 0 0.8rem; }
+.barra-fila { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; font-size: 0.82rem; }
+.barra-label { width: 90px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.barra-track { flex: 1; background: #eef1f5; border-radius: 4px; height: 14px; overflow: hidden; }
+.barra-fill { background: var(--acento); height: 100%; }
+.barra-valor { width: 20px; text-align: right; flex-shrink: 0; }
