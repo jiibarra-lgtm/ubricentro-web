@@ -4,7 +4,7 @@
 export const NEGOCIO = {
   nombre: "Lubricentro MP",
   telefono: "541151656144", // 011 5165-6144 → si no engancha por WhatsApp, probar con "5491151656144" (con el 9 de celular)
-  direccion: "Av. Juan Bautista Justo 3557, Villa del Parque, CABA",
+  direccion: "Av. Juan Bautista Justo 3557, Villa Crespo, CABA",
   googlePlaceId: "", // pendiente: sacarlo desde el buscador de Place ID de Google
   instagram: "",
   colorPrimario: "#1e3a5f",

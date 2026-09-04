@@ -12,15 +12,17 @@ export async function inyectarSchemaNegocio({ rating, total } = {}) {
     address: {
       "@type": "PostalAddress",
       streetAddress: "Av. Juan Bautista Justo 3557",
-      addressLocality: "Villa del Parque",
+      addressLocality: "Villa Crespo",
       addressRegion: "Ciudad Autónoma de Buenos Aires",
       addressCountry: "AR",
     },
     areaServed: [
+      { "@type": "Place", name: "Villa Crespo, CABA" },
+      { "@type": "Place", name: "La Paternal, CABA" },
       { "@type": "Place", name: "Villa del Parque, CABA" },
+      { "@type": "Place", name: "Villa General Mitre, CABA" },
       { "@type": "Place", name: "Agronomía, CABA" },
-      { "@type": "Place", name: "Villa Devoto, CABA" },
-      { "@type": "Place", name: "Caballito, CABA" },
+      { "@type": "Place", name: "Chacarita, CABA" },
     ],
     openingHoursSpecification: NEGOCIO.horarios.map((h) => ({
       "@type": "OpeningHoursSpecification",
