@@ -22,6 +22,11 @@
 - Variables de entorno en Vercel: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SITE_URL`
 - Cargar `slug` en cada fila de la tabla `servicios` (ej: `cambio-de-aceite`)
 
+## Panel de administración
+- Entrar a `/admin.html` (no está linkeado desde el sitio público, se accede por URL directa)
+- Usuario de acceso: `ibarrajuan0806@gmail.com` (creado en Supabase → Authentication → Users)
+- Desde ahí: marcar turnos como completados/cancelados, crear/editar/borrar servicios y precios, subir/borrar fotos del taller (se suben directo al bucket `galeria`, sin pasar por el dashboard de Supabase)
+
 ## Pendiente para las próximas fases
 - Admin panel (turnos, clientes, analíticas)
 - PWA + push notifications

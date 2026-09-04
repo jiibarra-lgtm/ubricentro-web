@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel de administración | Lubricentro MP</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="admin-body">
+
+  <div id="login-screen" class="login-screen">
+    <form id="form-login" class="login-box">
+      <h1>Panel de administración</h1>
+      <p>Lubricentro MP</p>
+      <label>Email <input type="email" id="login-email" required autocomplete="username" /></label>
+      <label>Contraseña <input type="password" id="login-password" required autocomplete="current-password" /></label>
+      <button type="submit" class="btn-cta grande">Ingresar</button>
+      <p id="login-error" class="login-error"></p>
+    </form>
+  </div>
+
+  <div id="admin-screen" class="admin-screen" hidden>
+    <header class="admin-header">
+      <span class="logo">Lubricentro MP · Admin</span>
+      <button id="btn-logout" class="btn-logout">Cerrar sesión</button>
+    </header>
+
+    <nav class="admin-tabs">
+      <button class="tab-btn activo" data-tab="turnos">Turnos</button>
+      <button class="tab-btn" data-tab="servicios">Servicios y precios</button>
+      <button class="tab-btn" data-tab="fotos">Fotos</button>
+    </nav>
+
+    <main class="admin-main">
+      <section id="tab-turnos" class="tab-panel activo">
+        <div class="panel-header">
+          <h2>Turnos</h2>
+          <input type="date" id="filtro-fecha-turnos" />
+        </div>
+        <div id="lista-turnos" class="lista-turnos">Cargando...</div>
+      </section>
+
+      <section id="tab-servicios" class="tab-panel">
+        <div class="panel-header">
+          <h2>Servicios y precios</h2>
+          <button id="btn-nuevo-servicio" class="btn-cta">+ Nuevo servicio</button>
+        </div>
+        <div id="lista-servicios-admin" class="lista-servicios-admin">Cargando...</div>
+      </section>
+
+      <section id="tab-fotos" class="tab-panel">
+        <div class="panel-header">
+          <h2>Fotos del taller</h2>
+          <label class="btn-cta btn-file">
+            + Subir foto
+            <input type="file" id="input-foto" accept="image/*" hidden />
+          </label>
+        </div>
+        <p id="foto-status"></p>
+        <div id="grid-fotos-admin" class="grid-fotos-admin">Cargando...</div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

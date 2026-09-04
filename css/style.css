@@ -65,7 +65,15 @@ body {
   margin: 0 auto;
 }
 
-.marcas { text-align: center; }
+.marcas {
+  text-align: center;
+  max-width: none;
+  padding: 0;
+  background: linear-gradient(135deg, #eef2f7, #e3e9f1);
+  border-top: 3px solid var(--acento);
+  border-bottom: 1px solid var(--borde);
+}
+.marcas-inner { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem; }
 .marcas h2 { color: var(--primario); margin-bottom: 1.5rem; }
 .marcas-subtitulo { margin-top: 2.5rem; font-size: 1.05rem; }
 
@@ -259,6 +267,22 @@ body {
 
 .galeria-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.6rem; }
 .galeria-grid img { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; }
+
+.blog { padding: 3rem 1.5rem; max-width: 960px; margin: 0 auto; }
+.blog h2 { color: var(--primario); margin-bottom: 1.5rem; }
+.blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+.blog-card { border-bottom: 1px solid var(--borde); padding-bottom: 1rem; }
+.blog-card img { width: 100%; height: 170px; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; }
+.blog-card h3 { font-size: 1.05rem; margin: 0 0 0.5rem; color: var(--texto); }
+.blog-card p { font-size: 0.9rem; color: #555; margin-bottom: 0.6rem; }
+.blog-card a { color: var(--primario); font-weight: 700; font-size: 0.9rem; text-decoration: none; }
+
+.articulo { max-width: 700px; margin: 0 auto; padding: 2.5rem 1.5rem; line-height: 1.7; }
+.articulo-imagen { width: 100%; max-height: 340px; object-fit: cover; border-radius: 10px; margin-bottom: 1.5rem; }
+.articulo h1 { color: var(--primario); }
+.articulo h2 { color: var(--primario); font-size: 1.15rem; margin-top: 1.8rem; }
+.articulo ul, .articulo ol { padding-left: 1.3rem; }
+.articulo li { margin-bottom: 0.5rem; }
 
 .faq details { border-bottom: 1px solid var(--borde); padding: 0.8rem 0; }
 .faq summary { cursor: pointer; font-weight: 600; }

@@ -13,7 +13,16 @@ export default async function handler(req, res) {
     .select("slug")
     .eq("activo", true);
 
-  const urlsEstaticas = ["", "/servicios.html", "/resenas.html", "/nosotros.html", "/turno.html"];
+  const urlsEstaticas = [
+    "",
+    "/servicios.html",
+    "/resenas.html",
+    "/nosotros.html",
+    "/turno.html",
+    "/como-medir-el-aceite.html",
+    "/cuando-cambiar-el-aceite.html",
+    "/mitos-y-verdades-aceite.html",
+  ];
   const urlsServicios = (servicios || []).map((s) => `/servicios/${s.slug}`);
   const todas = [...urlsEstaticas, ...urlsServicios];
 
