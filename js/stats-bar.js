@@ -1,6 +1,6 @@
 export async function renderStatsBar(container, { rating, total } = {}) {
   container.innerHTML = `
-    <div class="stat">asdf
+    <div class="stat">
       <strong>${rating ? rating.toFixed(1) : "—"} ★</strong>
       <span>Calificación en Google</span>
     </div>
