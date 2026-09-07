@@ -69,6 +69,7 @@ function mostrarPanel() {
   cargarPapelera();
   cargarFotos();
   cargarDashboard();
+  cargarAlertas();
 }
 
 function cambiarTab(tab) {
@@ -272,6 +273,7 @@ async function completarTurno(turnoId, vehiculoId) {
         <label><input type="checkbox" id="mc-filtro-ac" /> Filtro de aire acondicionado</label>
       </div>
       <label>Próximo service (km) <input type="number" id="mc-proximo" placeholder="Se calcula solo si lo dejás vacío (+10.000km)" /></label>
+      <label>Recomendaciones para el cliente <input type="text" id="mc-recomendaciones" placeholder="Ej: revisar pastillas de freno en el próximo service" /></label>
       <div class="mc-botones">
         <button id="mc-cancelar" class="btn-secundario-admin">Cancelar</button>
         <button id="mc-guardar" class="btn-cta">Guardar y completar</button>
@@ -303,6 +305,7 @@ async function completarTurno(turnoId, vehiculoId) {
         filtro_combustible: modal.querySelector("#mc-filtro-combustible").checked,
         filtro_aire_acondicionado: modal.querySelector("#mc-filtro-ac").checked,
         tipo_combustible,
+        recomendaciones: modal.querySelector("#mc-recomendaciones").value.trim() || null,
         detalle: mecanico ? `Atendido por ${mecanico}` : null,
       });
       if (km) {
@@ -406,6 +409,7 @@ async function buscarClientes() {
           <strong>${v.patente}</strong> ${v.marca || ""} ${v.modelo || ""} ${v.km_ultimo_service ? `· ${v.km_ultimo_service.toLocaleString("es-AR")} km` : ""}
           ${alerta}
           ${historial?.length ? `<ul class="historial-lista">${historial.map((h) => `<li>${h.fecha}${h.km ? " · " + h.km + " km" : ""}${h.detalle ? " · " + h.detalle : ""}</li>`).join("")}</ul>` : `<p class="sin-historial">Sin services registrados todavía.</p>`}
+          <button class="btn-ver-ficha" data-vehiculo="${v.id}">📋 Ver ficha completa</button>
         </div>`;
     }
 
@@ -420,8 +424,165 @@ async function buscarClientes() {
     card.querySelector(".cliente-notas").addEventListener("change", async (e) => {
       await supabase.from("clientes").update({ notas: e.target.value }).eq("id", id);
     });
+    card.querySelectorAll(".btn-ver-ficha").forEach((b) =>
+      b.addEventListener("click", () => abrirFichaVehiculo(b.dataset.vehiculo))
+    );
     cont.appendChild(card);
   }
+}
+
+// ---------- FICHA DEL VEHÍCULO ----------
+
+const NOMBRES_ITEMS_FICHA = {
+  cambio_aceite: "Cambio de aceite",
+  filtro_aceite: "Filtro de aceite",
+  filtro_aire: "Filtro de aire",
+  filtro_combustible: "Filtro de combustible",
+  filtro_aire_acondicionado: "Filtro de aire acondicionado",
+};
+
+async function abrirFichaVehiculo(vehiculoId) {
+  const { data: vehiculo } = await supabase
+    .from("vehiculos")
+    .select("id, patente, marca, modelo, anio, tipo_combustible, km_ultimo_service, cliente_id, clientes ( nombre, telefono )")
+    .eq("id", vehiculoId)
+    .single();
+
+  const { data: historial } = await supabase
+    .from("historial_service")
+    .select("*")
+    .eq("vehiculo_id", vehiculoId)
+    .order("fecha", { ascending: false });
+
+  const modal = document.createElement("div");
+  modal.className = "ficha-overlay";
+  modal.innerHTML = `
+    <div class="ficha-box">
+      <button class="ficha-cerrar" aria-label="Cerrar">✕</button>
+
+      <div class="ficha-contenido" id="ficha-imprimible">
+        <div class="ficha-header">
+          <div>
+            <h2>${vehiculo.marca || ""} ${vehiculo.modelo || ""} ${vehiculo.anio || ""}</h2>
+            <span class="ficha-patente">${vehiculo.patente}</span>
+          </div>
+          <div class="ficha-cliente">
+            <strong>${vehiculo.clientes?.nombre || "—"}</strong>
+            <span>${vehiculo.clientes?.telefono || "—"}</span>
+          </div>
+        </div>
+
+        <div class="ficha-stats">
+          <div><span>Km actual</span><strong>${vehiculo.km_ultimo_service?.toLocaleString("es-AR") || "—"}</strong></div>
+          <div><span>Combustible</span><strong>${vehiculo.tipo_combustible === "gasoil" ? "Gasoil" : "Nafta"}</strong></div>
+          <div><span>Services registrados</span><strong>${historial?.length || 0}</strong></div>
+          <div><span>Próximo service</span><strong>${historial?.[0]?.proximo_service_km?.toLocaleString("es-AR") || "—"} km</strong></div>
+        </div>
+
+        <h3>Historial completo</h3>
+        <div class="ficha-timeline">
+          ${
+            historial?.length
+              ? historial.map((h) => {
+                  const items = Object.entries(NOMBRES_ITEMS_FICHA)
+                    .filter(([campo]) => h[campo])
+                    .map(([, nombre]) => nombre);
+                  return `
+                    <div class="ficha-evento">
+                      <div class="ficha-evento-fecha">${new Date(h.fecha).toLocaleDateString("es-AR", { day: "2-digit", month: "short", year: "numeric" })}</div>
+                      <div class="ficha-evento-cuerpo">
+                        <strong>${h.km ? h.km.toLocaleString("es-AR") + " km" : "Km no registrado"}</strong>
+                        ${items.length ? `<ul>${items.map((i) => `<li>✅ ${i}</li>`).join("")}</ul>` : ""}
+                        ${h.detalle ? `<p class="ficha-detalle">${h.detalle}</p>` : ""}
+                      </div>
+                    </div>`;
+                }).join("")
+              : `<p class="sin-historial">Todavía no hay services registrados para este vehículo.</p>`
+          }
+        </div>
+      </div>
+
+      <div class="ficha-acciones">
+        <button id="btn-ficha-manual" class="btn-secundario-admin">+ Agregar entrada manual</button>
+        <button id="btn-ficha-imprimir" class="btn-cta">🖨 Imprimir / PDF</button>
+      </div>
+      <div id="ficha-form-manual" hidden></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  modal.querySelector(".ficha-cerrar").addEventListener("click", () => modal.remove());
+  modal.querySelector("#btn-ficha-imprimir").addEventListener("click", () => imprimirFicha(modal));
+  modal.querySelector("#btn-ficha-manual").addEventListener("click", () => toggleFormEntradaManual(modal, vehiculoId));
+}
+
+function toggleFormEntradaManual(modal, vehiculoId) {
+  const cont = modal.querySelector("#ficha-form-manual");
+  if (!cont.hidden) { cont.hidden = true; return; }
+
+  cont.hidden = false;
+  cont.innerHTML = `
+    <div class="ficha-form-grid">
+      <input type="date" id="fm-fecha" />
+      <input type="number" id="fm-km" placeholder="Kilometraje" />
+      <select id="fm-combustible"><option value="nafta">Nafta</option><option value="gasoil">Gasoil</option></select>
+    </div>
+    <div class="mc-checks">
+      <label><input type="checkbox" id="fm-aceite" /> Cambio de aceite</label>
+      <label><input type="checkbox" id="fm-filtro-aceite" /> Filtro de aceite</label>
+      <label><input type="checkbox" id="fm-filtro-aire" /> Filtro de aire</label>
+      <label><input type="checkbox" id="fm-filtro-combustible" /> Filtro de combustible</label>
+      <label><input type="checkbox" id="fm-filtro-ac" /> Filtro de aire acondicionado</label>
+    </div>
+    <input type="text" id="fm-detalle" placeholder="Detalle / notas (opcional)" style="width:100%; margin-top:0.6rem;" />
+    <button id="fm-guardar" class="btn-cta" style="margin-top:0.6rem;">Guardar entrada</button>
+  `;
+
+  cont.querySelector("#fm-guardar").addEventListener("click", async () => {
+    const fecha = cont.querySelector("#fm-fecha").value || new Date().toISOString().split("T")[0];
+    const km = Number(cont.querySelector("#fm-km").value) || null;
+    const tipo_combustible = cont.querySelector("#fm-combustible").value;
+
+    await supabase.from("historial_service").insert({
+      vehiculo_id: vehiculoId,
+      fecha,
+      km,
+      tipo_combustible,
+      cambio_aceite: cont.querySelector("#fm-aceite").checked,
+      filtro_aceite: cont.querySelector("#fm-filtro-aceite").checked,
+      filtro_aire: cont.querySelector("#fm-filtro-aire").checked,
+      filtro_combustible: cont.querySelector("#fm-filtro-combustible").checked,
+      filtro_aire_acondicionado: cont.querySelector("#fm-filtro-ac").checked,
+      detalle: cont.querySelector("#fm-detalle").value.trim() || null,
+    });
+    if (km) await supabase.from("vehiculos").update({ km_ultimo_service: km, tipo_combustible }).eq("id", vehiculoId);
+
+    document.querySelector(".ficha-overlay")?.remove();
+    abrirFichaVehiculo(vehiculoId);
+  });
+}
+
+function imprimirFicha(modal) {
+  const contenido = modal.querySelector("#ficha-imprimible").innerHTML;
+  const ventana = window.open("", "_blank");
+  ventana.document.write(`
+    <html><head><title>Ficha del vehículo</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 2rem; color: #1c1c1c; }
+      h2 { color: #1e3a5f; margin-bottom: 0.2rem; }
+      .ficha-patente { background:#1e3a5f; color:white; padding:2px 10px; border-radius:6px; font-weight:bold; }
+      .ficha-header { display:flex; justify-content:space-between; margin-bottom:1rem; }
+      .ficha-stats { display:flex; gap:1.5rem; margin-bottom:1.5rem; }
+      .ficha-stats div { text-align:center; }
+      .ficha-stats span { display:block; font-size:0.8rem; color:#666; }
+      .ficha-evento { display:flex; gap:1rem; margin-bottom:1rem; border-bottom:1px solid #ddd; padding-bottom:0.8rem; }
+      .ficha-evento-fecha { width:100px; font-weight:bold; color:#1e3a5f; }
+      ul { margin: 0.3rem 0; padding-left: 1.2rem; }
+    </style>
+    </head><body>${contenido}</body></html>
+  `);
+  ventana.document.close();
+  ventana.print();
 }
 
 // ---------- SERVICIOS ----------
@@ -625,6 +786,27 @@ async function cargarDashboard() {
     conteoHorarios[franja] = (conteoHorarios[franja] || 0) + 1;
   }
   renderBarras(document.getElementById("grafico-horarios"), conteoHorarios);
+
+  // clientes a los que conviene recordarles el service
+  const pendientes = await cargarRecordatoriosPendientes();
+  const contPendientes = document.getElementById("recordatorios-pendientes");
+  if (contPendientes) {
+    if (!pendientes.length) {
+      contPendientes.innerHTML = "<p>Nadie pendiente de recordatorio por ahora.</p>";
+    } else {
+      contPendientes.innerHTML = pendientes.map((h) => {
+        const tel = h.vehiculos?.clientes?.telefono?.replace(/\D/g, "");
+        const msj = encodeURIComponent(
+          `Hola ${h.vehiculos?.clientes?.nombre || ""}! Te escribimos de Lubricentro MP para recordarte que ya pasó un tiempo desde tu último service en tu ${h.vehiculos?.marca || ""}. ¿Querés que te reservemos un turno?`
+        );
+        return `
+          <div class="recordatorio-fila">
+            <span>${h.vehiculos?.patente || "—"} · ${h.vehiculos?.clientes?.nombre || "—"} · último service: ${h.fecha}</span>
+            <a href="https://wa.me/${tel}?text=${msj}" target="_blank" class="btn-secundario-admin">Recordar por WhatsApp</a>
+          </div>`;
+      }).join("");
+    }
+  }
 }
 
 function renderBarras(container, datos) {
@@ -639,4 +821,79 @@ function renderBarras(container, datos) {
         <span class="barra-valor">${valor}</span>
       </div>`)
     .join("");
+}
+
+// ---------- ALERTAS ----------
+
+const DEFINICION_ALERTAS = [
+  { campo: "alerta_vencido_km", label: "Alerta si el próximo service está vencido por kilometraje" },
+  { campo: "alerta_vencido_tiempo", label: "Alerta si está vencido por tiempo (recordatorio periódico)" },
+  { campo: "alerta_vtv", label: "Alerta de VTV/RTO próxima a vencer" },
+  { campo: "alerta_patron_visitas", label: "Alerta si cambió el patrón de visitas del cliente" },
+  { campo: "alerta_bateria", label: "Alerta de batería por vida útil estimada" },
+  { campo: "alerta_neumaticos", label: "Alerta de neumáticos por antigüedad" },
+  { campo: "alerta_km_erroneo", label: "Alerta si se carga un km menor al de la visita anterior (posible error)" },
+  { campo: "alerta_datos_faltantes", label: "Alerta de datos faltantes en la ficha (año, VIN, etc.)" },
+  { campo: "alerta_filtro_nunca_cambiado", label: "Alerta si nunca se cambió cierto filtro" },
+  { campo: "semaforo_activo", label: "Mostrar semáforo de estado (verde/amarillo/rojo) en las fichas" },
+];
+
+async function cargarAlertas() {
+  const cont = document.getElementById("form-alertas");
+  cont.textContent = "Cargando...";
+
+  const { data: config, error } = await supabase.from("config_alertas").select("*").eq("id", 1).single();
+  if (error) { cont.textContent = "No se pudo cargar la configuración."; return; }
+
+  cont.innerHTML = `
+    <div class="alerta-destacada">
+      <label>
+        <strong>Recordatorio periódico de service</strong><br/>
+        Recordar cada
+        <input type="number" id="al-meses" value="${config.meses_recordatorio}" min="1" max="24" style="width:60px" />
+        meses si el auto no volvió
+      </label>
+    </div>
+    <div class="lista-alertas">
+      ${DEFINICION_ALERTAS.filter((a) => a.campo !== "alerta_vencido_tiempo").map((a) => `
+        <label class="alerta-toggle">
+          <input type="checkbox" data-campo="${a.campo}" ${config[a.campo] ? "checked" : ""} />
+          ${a.label}
+        </label>
+      `).join("")}
+    </div>
+    <button id="btn-guardar-alertas" class="btn-cta" style="margin-top:1rem;">Guardar configuración</button>
+    <p id="alertas-status"></p>
+  `;
+
+  document.getElementById("btn-guardar-alertas").addEventListener("click", async () => {
+    const payload = { meses_recordatorio: Number(document.getElementById("al-meses").value) || 3 };
+    cont.querySelectorAll("input[data-campo]").forEach((input) => {
+      payload[input.dataset.campo] = input.checked;
+    });
+    const { error } = await supabase.from("config_alertas").update(payload).eq("id", 1);
+    document.getElementById("alertas-status").textContent = error ? "Error al guardar." : "Guardado ✓";
+  });
+}
+
+// ---------- LISTA DE RECORDATORIOS PENDIENTES ----------
+
+async function cargarRecordatoriosPendientes() {
+  const { data: config } = await supabase.from("config_alertas").select("meses_recordatorio, alerta_vencido_tiempo").eq("id", 1).single();
+  if (!config?.alerta_vencido_tiempo) return [];
+
+  const limite = new Date();
+  limite.setMonth(limite.getMonth() - config.meses_recordatorio);
+
+  const { data } = await supabase
+    .from("historial_service")
+    .select("vehiculo_id, fecha, vehiculos ( patente, marca, modelo, clientes ( nombre, telefono ) )")
+    .order("fecha", { ascending: false });
+
+  const porVehiculo = new Map();
+  for (const h of data || []) {
+    if (!porVehiculo.has(h.vehiculo_id)) porVehiculo.set(h.vehiculo_id, h);
+  }
+
+  return [...porVehiculo.values()].filter((h) => new Date(h.fecha) < limite);
 }
