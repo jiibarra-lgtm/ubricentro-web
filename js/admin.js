@@ -254,23 +254,65 @@ async function cambiarEstadoTurno(id, estado) {
 }
 
 async function completarTurno(turnoId, vehiculoId) {
-  const mecanico = prompt("¿Quién atendió este turno? (opcional, dejar vacío si no aplica)") || null;
-  const km = prompt("¿Kilometraje del auto al momento del service? (opcional)");
+  const modal = document.createElement("div");
+  modal.className = "modal-completar-overlay";
+  modal.innerHTML = `
+    <div class="modal-completar-box">
+      <h3>Completar service</h3>
+      <label>Mecánico <input type="text" id="mc-mecanico" placeholder="Opcional" /></label>
+      <label>Kilometraje actual <input type="number" id="mc-km" placeholder="Ej: 45000" /></label>
+      <label>Tipo de combustible
+        <select id="mc-combustible"><option value="nafta">Nafta</option><option value="gasoil">Gasoil</option></select>
+      </label>
+      <div class="mc-checks">
+        <label><input type="checkbox" id="mc-aceite" checked /> Cambio de aceite</label>
+        <label><input type="checkbox" id="mc-filtro-aceite" checked /> Filtro de aceite</label>
+        <label><input type="checkbox" id="mc-filtro-aire" /> Filtro de aire</label>
+        <label><input type="checkbox" id="mc-filtro-combustible" /> Filtro de combustible</label>
+        <label><input type="checkbox" id="mc-filtro-ac" /> Filtro de aire acondicionado</label>
+      </div>
+      <label>Próximo service (km) <input type="number" id="mc-proximo" placeholder="Se calcula solo si lo dejás vacío (+10.000km)" /></label>
+      <div class="mc-botones">
+        <button id="mc-cancelar" class="btn-secundario-admin">Cancelar</button>
+        <button id="mc-guardar" class="btn-cta">Guardar y completar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
 
-  const { error } = await supabase.from("turnos").update({ estado: "completado", mecanico }).eq("id", turnoId);
-  if (error) return alert("No se pudo actualizar el turno.");
+  modal.querySelector("#mc-cancelar").addEventListener("click", () => modal.remove());
 
-  if (vehiculoId) {
-    await supabase.from("historial_service").insert({
-      vehiculo_id: vehiculoId,
-      turno_id: turnoId,
-      km: km ? Number(km) : null,
-      detalle: mecanico ? `Atendido por ${mecanico}` : null,
-    });
-    if (km) await supabase.from("vehiculos").update({ km_ultimo_service: Number(km) }).eq("id", vehiculoId);
-  }
+  modal.querySelector("#mc-guardar").addEventListener("click", async () => {
+    const mecanico = modal.querySelector("#mc-mecanico").value.trim() || null;
+    const km = Number(modal.querySelector("#mc-km").value) || null;
+    const tipo_combustible = modal.querySelector("#mc-combustible").value;
+    const proximo_service_km = Number(modal.querySelector("#mc-proximo").value) || (km ? km + 10000 : null);
 
-  cargarTurnos();
+    const { error } = await supabase.from("turnos").update({ estado: "completado", mecanico }).eq("id", turnoId);
+    if (error) { alert("No se pudo actualizar el turno."); return; }
+
+    if (vehiculoId) {
+      await supabase.from("historial_service").insert({
+        vehiculo_id: vehiculoId,
+        turno_id: turnoId,
+        km,
+        proximo_service_km,
+        cambio_aceite: modal.querySelector("#mc-aceite").checked,
+        filtro_aceite: modal.querySelector("#mc-filtro-aceite").checked,
+        filtro_aire: modal.querySelector("#mc-filtro-aire").checked,
+        filtro_combustible: modal.querySelector("#mc-filtro-combustible").checked,
+        filtro_aire_acondicionado: modal.querySelector("#mc-filtro-ac").checked,
+        tipo_combustible,
+        detalle: mecanico ? `Atendido por ${mecanico}` : null,
+      });
+      if (km) {
+        await supabase.from("vehiculos").update({ km_ultimo_service: km, tipo_combustible }).eq("id", vehiculoId);
+      }
+    }
+
+    modal.remove();
+    cargarTurnos();
+  });
 }
 
 function renderVistaSemana(turnos) {

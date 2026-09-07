@@ -236,3 +236,37 @@ body.modo-oscuro .turno-info strong { color: #9db4d8; }
 .barra-track { flex: 1; background: #eef1f5; border-radius: 4px; height: 14px; overflow: hidden; }
 .barra-fill { background: var(--acento); height: 100%; }
 .barra-valor { width: 20px; text-align: right; flex-shrink: 0; }
+
+/* modal de completar service */
+.modal-completar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 1rem;
+}
+.modal-completar-box {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 380px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-completar-box h3 { margin: 0; color: var(--primario); }
+.modal-completar-box label { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.85rem; }
+.modal-completar-box input, .modal-completar-box select {
+  padding: 0.5rem; border: 1px solid var(--borde); border-radius: 6px; font-size: 0.9rem;
+}
+.mc-checks { display: flex; flex-direction: column; gap: 0.4rem; background: #f7f8fa; padding: 0.7rem; border-radius: 8px; }
+.mc-checks label { flex-direction: row; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+.mc-checks input { width: auto; }
+.mc-botones { display: flex; gap: 0.6rem; margin-top: 0.4rem; }
+.mc-botones button { flex: 1; }
