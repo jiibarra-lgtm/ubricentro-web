@@ -75,6 +75,7 @@ function mostrarPanel() {
 function cambiarTab(tab) {
   document.querySelectorAll(".tab-btn").forEach((b) => b.classList.toggle("activo", b.dataset.tab === tab));
   document.querySelectorAll(".tab-panel").forEach((p) => p.classList.toggle("activo", p.id === `tab-${tab}`));
+  if (tab === "clientes") buscarClientes();
 }
 
 // ---------- MODO OSCURO ----------
@@ -368,19 +369,31 @@ function exportarTurnosCSV() {
 async function buscarClientes() {
   const termino = document.getElementById("buscar-cliente").value.trim();
   const cont = document.getElementById("resultado-clientes");
-  if (!termino) { cont.innerHTML = ""; return; }
-
   cont.innerHTML = "Buscando...";
 
-  const { data: vehiculos } = await supabase
-    .from("vehiculos")
-    .select("id, patente, marca, modelo, km_ultimo_service, cliente_id")
-    .ilike("patente", `%${termino}%`);
+  let vehiculos, clientes;
 
-  const { data: clientes } = await supabase
-    .from("clientes")
-    .select("id, nombre, telefono, notas")
-    .ilike("telefono", `%${termino}%`);
+  if (!termino) {
+    // sin texto en el buscador: traer todos los clientes (los más nuevos primero)
+    const { data } = await supabase
+      .from("clientes")
+      .select("id, nombre, telefono, notas")
+      .order("created_at", { ascending: false })
+      .limit(100);
+    clientes = data;
+    vehiculos = [];
+  } else {
+    const { data: v } = await supabase
+      .from("vehiculos")
+      .select("id, patente, marca, modelo, km_ultimo_service, cliente_id")
+      .ilike("patente", `%${termino}%`);
+    const { data: c } = await supabase
+      .from("clientes")
+      .select("id, nombre, telefono, notas")
+      .ilike("telefono", `%${termino}%`);
+    vehiculos = v;
+    clientes = c;
+  }
 
   const clienteIds = new Set([...(clientes || []).map((c) => c.id), ...(vehiculos || []).map((v) => v.cliente_id)]);
 
