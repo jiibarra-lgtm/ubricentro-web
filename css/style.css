@@ -90,10 +90,6 @@ body {
     width: 100%;
   }
   .nav nav a { margin-left: 0; font-size: 0.85rem; }
-<<<<<<< HEAD
-=======
-@media (max-width: 640px) {
->>>>>>> 615000d9518d8b43d3618996c41d90933561081e
   .nav .btn-cta { padding: 0.45rem 0.85rem; font-size: 0.85rem; }
   .hero { padding: 2.6rem 1.2rem; }
   .hero h1 { font-size: 1.5rem; }
