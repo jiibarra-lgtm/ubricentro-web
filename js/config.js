@@ -102,4 +102,4 @@ export const FOTOS_FALLBACK = [
 
 // Imagen de fondo del hero y del popup de cotización (ya es una foto real
 // subida al bucket, no una de stock).
-export const HERO_IMAGEN_FALLBACK = "https://klqlmmnwzouwznfpbvfm.supabase.co/storage/v1/object/public/galeria/ChatGPT%20Image%203%20sept%202026,%2012_12_58%20a.m..png";
+export const HERO_IMAGEN_FALLBACK = "https://rzaynyxqgczltvjsjqvq.supabase.co/storage/v1/object/public/productos-fotos/ChatGPT%20Image%203%20sept%202026,%2012_12_58%20a.m..png";

@@ -1,7 +1,7 @@
 import { NEGOCIO } from "./config.js";
 
 const CLAVE_SESSION = "popup-cotizacion-cerrado";
-const IMAGEN_POPUP = "https://klqlmmnwzouwznfpbvfm.supabase.co/storage/v1/object/public/galeria/441c70a2-d28d-4e96-9f96-63f7d97d6fc6.png";
+const IMAGEN_POPUP = "https://rzaynyxqgczltvjsjqvq.supabase.co/storage/v1/object/public/productos-fotos/taller%20gral.png";
 
 export function initPopupCotizacion() {
   // si ya lo cerró en esta visita, no lo volvemos a mostrar hasta que
